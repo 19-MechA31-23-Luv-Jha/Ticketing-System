@@ -1,0 +1,14 @@
+<div class="ticket-container">
+    <!-- Ticket Cards -->
+    <!-- local change -->
+    <!-- Remote change -->
+    <div class="ticket-card" *ngFor="let ticket of tickets">
+      <img src="https://pinandpop.s3.amazonaws.com/pintradingdb/18237_big.jpg" alt="Disney Image">
+      <h3>{{ ticket.event }}</h3>
+      <p>Ticket ID: {{ ticket.id }}</p>
+      <p>Seat: {{ ticket.seat }}</p>
+      <p>Price: Rs. {{ ticket.price }}</p>
+      <button (click)="bookTicket()" class="book-btn">Book</button>
+    </div>
+  </div>
+  

@@ -1,0 +1,46 @@
+<div class="ticket-container">
+    <!-- Form Card to Add New Ticket -->
+    <div class="ticket-card add-ticket-card">
+      <h3>Add New Ticket</h3>
+      <form (ngSubmit)="addTicket()">
+        <label for="event">Event:</label>
+        <input type="text" id="event" [(ngModel)]="newTicket.event" name="event" required>
+  
+        <label for="seat">Seat:</label>
+        <input type="text" id="seat" [(ngModel)]="newTicket.seat" name="seat" required>
+  
+        <label for="price">Price (INR):</label>
+        <input type="number" id="price" [(ngModel)]="newTicket.price" name="price" required>
+  
+        <button type="submit">Add Ticket</button>
+      </form>
+    </div>
+  
+    <!-- Existing Ticket Cards -->
+    <div class="ticket-card" *ngFor="let ticket of tickets">
+      <img src="https://pinandpop.s3.amazonaws.com/pintradingdb/18237_big.jpg" alt="Disney Image">
+      
+      <ng-container *ngIf="editingTicketId === ticket.id; else displayMode">
+        <h3><input type="text" [(ngModel)]="ticket.event" name="event" required></h3>
+        <p>Ticket ID: {{ ticket.id }}</p>
+        <p>Seat: <input type="text" [(ngModel)]="ticket.seat" name="seat" required></p>
+        <p>Price: Rs. <input type="number" [(ngModel)]="ticket.price" name="price" required></p>
+        <div>
+          <button (click)="saveTicket(ticket)" class="save-btn">Save</button>
+          <button (click)="cancelEditing()" class="cancel-btn">Cancel</button>
+        </div>
+      </ng-container>
+      
+      <ng-template #displayMode>
+        <h3>{{ ticket.event }}</h3>
+        <p>Ticket ID: {{ ticket.id }}</p>
+        <p>Seat: {{ ticket.seat }}</p>
+        <p>Price: Rs. {{ ticket.price }}</p>
+        <div>
+          <button (click)="deleteTicket(ticket.id)" class="delete-btn">Delete</button>
+          <button (click)="startEditing(ticket.id)" class="update-btn">Update</button>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+  
