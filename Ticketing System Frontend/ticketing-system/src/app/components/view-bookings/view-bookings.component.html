@@ -1,0 +1,16 @@
+<div class="filter-container">
+    <input type="text" placeholder="Filter by User" [(ngModel)]="filterUser" (ngModelChange)="filterBookings()">
+    <button (click)="clearFilters()">Clear Filters</button>
+  </div>
+  
+  <div class="bookings-container">
+    <div *ngFor="let booking of filteredBookings" class="booking-card">
+      <h3>{{ booking.ticket.event }}</h3>
+      <p>User: {{ booking.user }}</p>
+      <p>Ticket ID: {{ booking.ticket.id }}</p>
+      <p>Seat: {{ booking.ticket.seat }}</p>
+      <p>Price: Rs. {{ booking.ticket.price }}</p>
+      <p>Booking Date: {{ booking.bookingDate }}</p>
+    </div>
+  </div>
+  

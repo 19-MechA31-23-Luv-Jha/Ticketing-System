@@ -1,15 +1,26 @@
 <div class="ticket-container">
-    <!-- Ticket Cards -->
-    <!-- Testing Git Pull -->
-    <!-- This is a local change - new branch created-->
-    <!-- This is a local change from main branch- for conflict -->
-    <div class="ticket-card" *ngFor="let ticket of tickets">
-      <img src="https://pinandpop.s3.amazonaws.com/pintradingdb/18237_big.jpg" alt="Disney Image">
-      <h3>{{ ticket.event }}</h3>
-      <p>Ticket ID: {{ ticket.id }}</p>
-      <p>Seat: {{ ticket.seat }}</p>
-      <p>Price: Rs. {{ ticket.price }}</p>
-      <button (click)="bookTicket()" class="book-btn">Book</button>
-    </div>
+  <div class="ticket-card" *ngFor="let ticket of tickets">
+    <img src="https://pinandpop.s3.amazonaws.com/pintradingdb/18237_big.jpg" alt="Ticket Image">
+    <h3>{{ ticket.event }}</h3>
+    <p>Ticket ID: {{ ticket.id }}</p>
+    <p>Seat: {{ ticket.seat }}</p>
+    <p>Price: Rs. {{ ticket.price }}</p>
+    <button (click)="showBookingForm(ticket)" class="book-btn">Book</button>
   </div>
-  
+</div>
+
+<!-- Booking Modal -->
+<div *ngIf="selectedTicket" class="modal">
+  <div class="modal-content">
+    <span class="close" (click)="cancelBooking()">&times;</span>
+    <h2>Book Ticket for {{ selectedTicket.event }}</h2>
+    <form (ngSubmit)="bookTicket()">
+      <label for="user">Your Name:</label>
+      <input type="text" id="user" [(ngModel)]="user" name="user" required>
+      <div class="form-buttons">
+        <button type="submit" class="book-btn">Confirm Booking</button>
+        <button type="button" (click)="cancelBooking()" class="cancel-btn">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
