@@ -7,7 +7,7 @@ import { Ticket } from '../data-types';
   providedIn: 'root'
 })
 export class TicketService {
-  private baseUrl = 'http://localhost:8585/api/tickets';
+  private baseUrl = 'http://localhost:8585/tickets/api/tickets';
 
   constructor(private http: HttpClient) { }
 

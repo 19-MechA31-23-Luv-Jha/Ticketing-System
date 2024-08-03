@@ -8,7 +8,7 @@ import { Booking } from '../data-types';
 })
 export class BookingService {
   
-  private baseUrl = 'http://localhost:8585/api/bookings'; 
+  private baseUrl = 'http://localhost:8585/tickets/api/bookings'; 
 
   constructor(private http: HttpClient) { }
 
