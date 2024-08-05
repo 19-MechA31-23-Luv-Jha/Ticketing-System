@@ -15,7 +15,7 @@
     <span class="close" (click)="cancelBooking()">&times;</span>
     <h2>Book Ticket for {{ selectedTicket.event }}</h2>
     <form (ngSubmit)="bookTicket()">
-      <label for="user">Your Name:</label>
+      <label for="user">Your Name:  </label>
       <input type="text" id="user" [(ngModel)]="user" name="user" required>
       <div class="form-buttons">
         <button type="submit" class="book-btn">Confirm Booking</button>

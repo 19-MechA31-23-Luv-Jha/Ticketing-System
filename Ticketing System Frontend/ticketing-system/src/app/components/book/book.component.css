@@ -102,6 +102,7 @@
   background-color: #dc3545;
   color: white;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .cancel-btn:hover {
