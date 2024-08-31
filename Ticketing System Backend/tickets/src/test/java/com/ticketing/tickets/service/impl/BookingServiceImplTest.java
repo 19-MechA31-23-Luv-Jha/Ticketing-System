@@ -5,7 +5,6 @@ import com.ticketing.tickets.entity.Ticket;
 import com.ticketing.tickets.exception.ResourceAlreadyExistsException;
 import com.ticketing.tickets.exception.ResourceNotFoundException;
 import com.ticketing.tickets.repository.BookingRepository;
-import com.ticketing.tickets.service.BookingService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,7 +29,7 @@ class BookingServiceImplTest {
     private BookingRepository bookingRepository;
 
     @InjectMocks
-    BookingService bookingService = new BookingServiceImpl();
+    private BookingServiceImpl bookingService;
 
 
     @Test

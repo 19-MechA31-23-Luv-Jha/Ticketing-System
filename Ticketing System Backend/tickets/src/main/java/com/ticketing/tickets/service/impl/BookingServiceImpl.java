@@ -17,8 +17,12 @@ import java.util.Optional;
 @Service
 @Log4j2
 public class BookingServiceImpl implements BookingService {
-    @Autowired
-    private BookingRepository bookingRepository;
+
+    private final BookingRepository bookingRepository;
+
+    public BookingServiceImpl(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
+    }
 
     public Booking saveBooking(Booking booking) {
         log.debug("Creating Booking: {}", booking);

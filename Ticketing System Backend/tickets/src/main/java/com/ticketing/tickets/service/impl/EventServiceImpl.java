@@ -19,8 +19,11 @@ import java.util.Optional;
 @Log4j2
 public class EventServiceImpl implements EventService {
 
-    @Autowired
     private RestTemplate restTemplate;
+
+    public EventServiceImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     private static final String MOCK_API_URL = "https://66be4c7774dfc195586f1cc1.mockapi.io/api/events";
 

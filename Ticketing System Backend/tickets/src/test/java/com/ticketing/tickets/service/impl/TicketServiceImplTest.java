@@ -3,7 +3,6 @@ package com.ticketing.tickets.service.impl;
 import com.ticketing.tickets.entity.Ticket;
 import com.ticketing.tickets.exception.ResourceNotFoundException;
 import com.ticketing.tickets.repository.TicketRepository;
-import com.ticketing.tickets.service.TicketService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +25,7 @@ class TicketServiceImplTest {
     private TicketRepository ticketRepository;
 
     @InjectMocks
-    TicketService ticketService = new TicketServiceImpl();
+    private TicketServiceImpl ticketService;
 
 
     @Test

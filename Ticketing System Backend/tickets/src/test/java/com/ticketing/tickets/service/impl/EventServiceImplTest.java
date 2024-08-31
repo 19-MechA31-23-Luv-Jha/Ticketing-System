@@ -3,14 +3,11 @@ package com.ticketing.tickets.service.impl;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.ticketing.tickets.entity.Event;
-import com.ticketing.tickets.exception.ResourceNotFoundException;
-import com.ticketing.tickets.service.EventService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,7 +26,7 @@ class EventServiceImplTest {
     private RestTemplate restTemplate;
 
     @InjectMocks
-    private EventService eventService = new EventServiceImpl();
+    private EventServiceImpl eventService ;
 
     private Event testEvent;
 
