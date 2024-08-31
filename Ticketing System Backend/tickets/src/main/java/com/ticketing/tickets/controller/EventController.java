@@ -1,10 +1,7 @@
 package com.ticketing.tickets.controller;
 
 import com.ticketing.tickets.entity.Event;
-import com.ticketing.tickets.service.BookingService;
 import com.ticketing.tickets.service.EventService;
-import com.ticketing.tickets.service.TicketService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
