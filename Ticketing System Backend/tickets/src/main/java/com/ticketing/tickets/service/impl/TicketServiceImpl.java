@@ -1,5 +1,6 @@
 package com.ticketing.tickets.service.impl;
 
+import com.ticketing.tickets.entity.Booking;
 import com.ticketing.tickets.entity.Ticket;
 import com.ticketing.tickets.exception.ResourceNotFoundException;
 import com.ticketing.tickets.repository.TicketRepository;
@@ -25,9 +26,13 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<Ticket> getAllTickets() {
+    public List<Ticket> getAllTickets() {                                //updated
         log.debug("Fetching all tickets");
-        return ticketRepository.findAll();
+        List<Ticket> tickets =  ticketRepository.findAll();
+        if (tickets.isEmpty()) {
+            throw new ResourceNotFoundException("No tickets found");
+        }
+        return tickets;
     }
 
     @Override

@@ -56,9 +56,6 @@ public class EventServiceImpl implements EventService {
         String url = MOCK_API_URL + "/" + id;
 
         Event existingEvent = restTemplate.getForObject(url, Event.class);
-        if (existingEvent == null) {
-            throw new ResourceNotFoundException("Event not found with id: " + id);
-        }
 
         Date currentDate = new Date();
         existingEvent.setDate(currentDate);

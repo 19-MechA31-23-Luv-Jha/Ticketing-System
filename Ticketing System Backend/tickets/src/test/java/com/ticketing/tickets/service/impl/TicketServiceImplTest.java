@@ -1,6 +1,7 @@
 package com.ticketing.tickets.service.impl;
 
 import com.ticketing.tickets.entity.Ticket;
+import com.ticketing.tickets.exception.ResourceNotFoundException;
 import com.ticketing.tickets.repository.TicketRepository;
 import com.ticketing.tickets.service.TicketService;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,7 @@ class TicketServiceImplTest {
 
         Ticket savedTicket = ticketService.saveTicket(ticket);
 
+        assertNotNull(savedTicket);
         assertEquals(ticket, savedTicket);
         verify(ticketRepository, times(1)).save(ticket);
     }
@@ -48,7 +51,9 @@ class TicketServiceImplTest {
 
         List<Ticket> retrievedTickets = ticketService.getAllTickets();
 
+        assertNotNull(retrievedTickets);
         assertEquals(2, retrievedTickets.size());
+        assertEquals(ticket1.getEvent(), tickets.get(0).getEvent());
         verify(ticketRepository, times(1)).findAll();
     }
 
@@ -92,4 +97,46 @@ class TicketServiceImplTest {
         verify(ticketRepository, times(1)).findById(1L);
         verify(ticketRepository, times(1)).delete(ticket);
     }
+
+    @Test
+    void shouldThrowExceptionWhenNoTicketsFound() {
+        when(ticketRepository.findAll()).thenReturn(new ArrayList<>());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            ticketService.getAllTickets();
+        });
+
+        assertEquals("No tickets found", exception.getMessage());
+
+        verify(ticketRepository, times(1)).findAll();
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdatingNonExistentTicket() {
+        Ticket ticket = new Ticket(1L, "Concert", "A1", new BigDecimal("100.00"));
+
+        when(ticketRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            ticketService.updateTicket(999L, ticket);
+        });
+
+        assertEquals("Ticket not found with id: 999", exception.getMessage());
+
+        verify(ticketRepository, times(1)).findById(999L);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenDeletingNonExistentTicket() {
+        when(ticketRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        Exception exception = assertThrows(ResourceNotFoundException.class, () -> {
+            ticketService.deleteTicket(999L);
+        });
+
+        assertEquals("Ticket not found with id: 999", exception.getMessage());
+
+        verify(ticketRepository, times(1)).findById(999L);
+    }
+
 }
