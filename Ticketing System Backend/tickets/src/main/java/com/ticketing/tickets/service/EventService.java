@@ -3,7 +3,7 @@ package com.ticketing.tickets.service;
 import com.ticketing.tickets.entity.Event;
 
 import java.util.List;
-import java.util.Optional;
+
 
 public interface EventService {
     Event saveEvent(Event event);

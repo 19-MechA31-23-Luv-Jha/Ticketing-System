@@ -3,6 +3,7 @@ package com.ticketing.tickets.controller;
 
 import com.ticketing.tickets.entity.Ticket;
 import com.ticketing.tickets.exception.ResourceNotFoundException;
+import com.ticketing.tickets.service.EventService;
 import com.ticketing.tickets.service.TicketService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,11 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class TicketController {
 
-    @Autowired
-    private TicketService ticketService;
+    private final TicketService ticketService;
+
+    public TicketController(TicketService ticketService) {
+        this.ticketService = ticketService;
+    }
 
     @PostMapping
     public ResponseEntity<Ticket> createTicket(@Validated @RequestBody Ticket ticket) {

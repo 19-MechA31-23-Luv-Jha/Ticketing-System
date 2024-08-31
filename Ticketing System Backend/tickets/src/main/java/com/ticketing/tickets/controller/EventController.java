@@ -1,21 +1,25 @@
 package com.ticketing.tickets.controller;
 
 import com.ticketing.tickets.entity.Event;
+import com.ticketing.tickets.service.BookingService;
 import com.ticketing.tickets.service.EventService;
+import com.ticketing.tickets.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/events")
 public class EventController {
 
-    @Autowired
-    private EventService eventService;
+    private final EventService eventService;
+
+    public EventController(EventService eventService) {
+        this.eventService = eventService;
+    }
 
     @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event) {

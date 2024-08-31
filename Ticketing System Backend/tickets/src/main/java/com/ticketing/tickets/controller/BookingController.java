@@ -21,11 +21,13 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class BookingController {
 
-    @Autowired
-    private BookingService bookingService;
+    private final BookingService bookingService;
+    private final TicketService ticketService;
 
-    @Autowired
-    private TicketService ticketService;
+    public BookingController(BookingService bookingService, TicketService ticketService) {
+        this.bookingService = bookingService;
+        this.ticketService = ticketService;
+    }
 
     @PostMapping
     public ResponseEntity<Booking> createBooking(@Validated @RequestBody Booking booking) {
