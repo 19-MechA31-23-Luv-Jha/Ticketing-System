@@ -26,6 +26,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private static final String MOCK_API_URL = "https://66be4c7774dfc195586f1cc1.mockapi.io/api/events";
+    private static final String MOCK_API_RESPONSE_LOG = "MockAPI Response: {}";
 
     @Override
     public Event saveEvent(Event event) {
@@ -33,7 +34,7 @@ public class EventServiceImpl implements EventService {
         Date currentDate = new Date();
         event.setDate(currentDate);
         Event mockApiResponse = restTemplate.postForObject(MOCK_API_URL, event, Event.class);
-        log.debug("MockAPI Response: {}", mockApiResponse);
+        log.debug(MOCK_API_RESPONSE_LOG, mockApiResponse);
         return mockApiResponse;
     }
 
@@ -41,7 +42,7 @@ public class EventServiceImpl implements EventService {
     public List<Event> getAllEvents() {
         log.debug("Fetching all events");
         List<Event>  mockApiResponse = restTemplate.getForObject(MOCK_API_URL,List.class);
-        log.debug("MockAPI Response: {}", (Object) mockApiResponse);
+        log.debug(MOCK_API_RESPONSE_LOG, (Object) mockApiResponse);
         return mockApiResponse;
     }
 
@@ -49,7 +50,7 @@ public class EventServiceImpl implements EventService {
     public Event getEventById(String id) {
         log.debug("Fetching event by id: {}", id);
         Event mockApiResponse = restTemplate.getForObject(MOCK_API_URL + "/" + id, Event.class);
-        log.debug("MockAPI Response: {}", mockApiResponse);
+        log.debug(MOCK_API_RESPONSE_LOG, mockApiResponse);
         return mockApiResponse;
     }
 
@@ -67,7 +68,7 @@ public class EventServiceImpl implements EventService {
         restTemplate.put(url, existingEvent);
 
         Event updatedEvent = restTemplate.getForObject(url, Event.class);
-        log.debug("MockAPI Response: {}", updatedEvent);
+        log.debug(MOCK_API_RESPONSE_LOG, updatedEvent);
         return updatedEvent;
     }
 
