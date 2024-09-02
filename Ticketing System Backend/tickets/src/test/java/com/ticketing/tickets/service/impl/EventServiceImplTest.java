@@ -50,7 +50,7 @@ class EventServiceImplTest {
 
         assertNotNull(savedEvent);
         assertEquals(testEvent, savedEvent);
-        verify(restTemplate, times(1)).postForObject(eq(MOCK_API_URL), eq(testEvent), eq(Event.class));
+        verify(restTemplate, times(1)).postForObject(MOCK_API_URL,testEvent,Event.class);
     }
 
     @Test
@@ -61,7 +61,7 @@ class EventServiceImplTest {
         List<Event> retrievedEvents = eventService.getAllEvents();
 
         assertEquals(events, retrievedEvents);
-        verify(restTemplate, times(1)).getForObject(eq(MOCK_API_URL), eq(List.class));
+        verify(restTemplate, times(1)).getForObject(MOCK_API_URL, List.class);
     }
 
     @Test
@@ -71,7 +71,7 @@ class EventServiceImplTest {
         Event retrievedEvent = eventService.getEventById("1");
 
         assertEquals(testEvent, retrievedEvent);
-        verify(restTemplate, times(1)).getForObject(eq(MOCK_API_URL + "/1"), eq(Event.class));
+        verify(restTemplate, times(1)).getForObject(MOCK_API_URL + "/1", Event.class);
     }
 
     @Test
@@ -81,8 +81,8 @@ class EventServiceImplTest {
         Event updatedEvent = eventService.updateEvent(1L, testEvent);
 
         assertEquals(testEvent, updatedEvent);
-        verify(restTemplate, times(2)).getForObject(eq(MOCK_API_URL + "/1"), eq(Event.class));
-        verify(restTemplate, times(1)).put(eq(MOCK_API_URL + "/1"), eq(testEvent));
+        verify(restTemplate, times(2)).getForObject(MOCK_API_URL + "/1", Event.class);
+        verify(restTemplate, times(1)).put(MOCK_API_URL + "/1", testEvent);
     }
 
     @Test
@@ -91,7 +91,7 @@ class EventServiceImplTest {
 
         assertThrows(NullPointerException.class, () -> eventService.updateEvent(1L, testEvent));
 
-        verify(restTemplate, times(1)).getForObject(eq(MOCK_API_URL + "/1"), eq(Event.class));
+        verify(restTemplate, times(1)).getForObject(MOCK_API_URL + "/1", Event.class);
         verify(restTemplate, never()).put(anyString(), any(Event.class));
     }
 
@@ -101,7 +101,7 @@ class EventServiceImplTest {
 
         eventService.deleteEvent(1L);
 
-        verify(restTemplate, times(1)).delete(eq(MOCK_API_URL + "/1"));
+        verify(restTemplate, times(1)).delete(MOCK_API_URL + "/1");
     }
 
 
