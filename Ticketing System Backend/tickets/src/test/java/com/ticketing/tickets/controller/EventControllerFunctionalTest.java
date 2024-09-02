@@ -47,7 +47,7 @@ class EventControllerFunctionalTest {
     }
 
     @Test
-    public void testCreateEvent() throws Exception {
+    void testCreateEvent() throws Exception {
         when(eventService.saveEvent(any(Event.class))).thenReturn(event);
 
         mockMvc.perform(post("/events")
@@ -59,7 +59,7 @@ class EventControllerFunctionalTest {
     }
 
     @Test
-    public void testGetAllEvents() throws Exception {
+    void testGetAllEvents() throws Exception {
         when(eventService.getAllEvents()).thenReturn(Arrays.asList(event));
 
         mockMvc.perform(get("/events")
@@ -70,7 +70,7 @@ class EventControllerFunctionalTest {
     }
 
     @Test
-    public void testGetEventById() throws Exception {
+    void testGetEventById() throws Exception {
         when(eventService.getEventById(anyString())).thenReturn(event);
 
         mockMvc.perform(get("/events/{id}", 1L)
@@ -80,7 +80,7 @@ class EventControllerFunctionalTest {
     }
 
     @Test
-    public void testUpdateEvent() throws Exception {
+    void testUpdateEvent() throws Exception {
         event.setName("Updated Event");
         when(eventService.updateEvent(anyLong(), any(Event.class))).thenReturn(event);
 
@@ -92,7 +92,7 @@ class EventControllerFunctionalTest {
     }
 
     @Test
-    public void testDeleteEvent() throws Exception {
+    void testDeleteEvent() throws Exception {
         Mockito.doNothing().when(eventService).deleteEvent(anyLong());
 
         mockMvc.perform(delete("/events/{id}", 1L)
