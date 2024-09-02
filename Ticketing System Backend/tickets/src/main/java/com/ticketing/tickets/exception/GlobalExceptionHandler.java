@@ -19,29 +19,31 @@ import java.util.Map;
 @Log4j2
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    private static final String ERROR_KEY = "error";
+
     // Handle ResourceNotFoundException
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+    public ResponseEntity<Map<String, String>> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
         log.error("ResourceNotFoundException: {}", ex.getMessage());
         Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
+        response.put(ERROR_KEY, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<?> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, WebRequest request) {
+    public ResponseEntity<Map<String, String>> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex, WebRequest request) {
         log.error("ResourceAlreadyExistsException: {}", ex.getMessage());
         Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
+        response.put(ERROR_KEY, ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     // Handle global exceptions
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleGlobalException(Exception ex, WebRequest request) {
+    public ResponseEntity<Map<String, String>> handleGlobalException(Exception ex, WebRequest request) {
         log.error("Exception: {}", ex.getMessage());
         Map<String, String> response = new HashMap<>();
-        response.put("error", "Internal server error");
+        response.put(ERROR_KEY, "Internal server error");
         response.put("message", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -53,8 +55,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             HttpHeaders headers,
             HttpStatusCode status,
             WebRequest request) {
-        log.error("MethodArgumentNotValidException: {}", ex.getMessage());        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        log.error("MethodArgumentNotValidException: {}", ex.getMessage());
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
