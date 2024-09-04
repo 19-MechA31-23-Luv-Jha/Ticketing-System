@@ -59,4 +59,25 @@ public class TicketController {
         ticketService.deleteTicket(ticketId);
         return new ResponseEntity<>("Ticket Deleted Successfully.",HttpStatus.OK);
     }
+
+    @GetMapping("/S3/{id}")
+    public ResponseEntity<Ticket> getTicketByIdFromS3(@PathVariable(value = "id") Long ticketId)
+            throws ResourceNotFoundException {
+        log.debug("Request to get ticket by id from S3: {}", ticketId);
+        Ticket ticket = ticketService.getTicketFromS3(ticketId);
+        return new ResponseEntity<>(ticket,HttpStatus.OK);
+    }
+
+    @GetMapping("/S3")
+    public ResponseEntity<List<Ticket>> getAllTicketsFromS3() {
+        log.debug("Request to get all tickets From S3");
+        return new ResponseEntity<>(ticketService.getAllTicketsFromS3(),HttpStatus.OK);
+    }
+
+    @DeleteMapping("S3/{id}")
+    public ResponseEntity<String> deleteTicketFromS3(@PathVariable(value = "id") Long ticketId) throws ResourceNotFoundException {
+        log.debug("Request to delete ticket id From S3: {}", ticketId);
+        ticketService.deleteTicketFromS3(ticketId);
+        return new ResponseEntity<>("Ticket Deleted Successfully From S3.",HttpStatus.OK);
+    }
 }

@@ -11,4 +11,8 @@ public interface TicketService {
     Optional<Ticket> getTicketById(Long id);
     Ticket updateTicket(Long id, Ticket ticket);
     void deleteTicket(Long id);
+
+    Ticket getTicketFromS3(Long id);
+    List<Ticket> getAllTicketsFromS3();
+    void deleteTicketFromS3(Long id);
 }

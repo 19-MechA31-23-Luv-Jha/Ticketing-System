@@ -176,4 +176,56 @@ class TicketControllerFunctionalTest {
                 .andExpect(jsonPath("$.seat").value("Seat is mandatory"))
                 .andExpect(jsonPath("$.price").value("Price must be greater than 0"));
     }
+
+    // Tests for S3 endpoints
+
+    @Test
+    void shouldGetTicketByIdFromS3() throws Exception {
+        when(ticketService.getTicketFromS3(anyLong())).thenReturn(testTicket);
+
+        mockMvc.perform(get("/api/tickets/S3/{id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.event").value(testTicket.getEvent()))
+                .andExpect(jsonPath("$.seat").value(testTicket.getSeat()))
+                .andExpect(jsonPath("$.price").value(testTicket.getPrice().doubleValue()));
+    }
+
+    @Test
+    void shouldGetAllTicketsFromS3() throws Exception {
+        when(ticketService.getAllTicketsFromS3()).thenReturn(Arrays.asList(testTicket));
+
+        mockMvc.perform(get("/api/tickets/S3"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].event").value(testTicket.getEvent()))
+                .andExpect(jsonPath("$[0].seat").value(testTicket.getSeat()))
+                .andExpect(jsonPath("$[0].price").value(testTicket.getPrice().doubleValue()));
+    }
+
+    @Test
+    void shouldDeleteTicketFromS3() throws Exception {
+        Mockito.doNothing().when(ticketService).deleteTicketFromS3(anyLong());
+
+        mockMvc.perform(delete("/api/tickets/S3/{id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Ticket Deleted Successfully From S3."));
+    }
+
+    @Test
+    void shouldReturnNotFoundForNonExistentTicketIdFromS3() throws Exception {
+        when(ticketService.getTicketFromS3(anyLong())).thenThrow(new ResourceNotFoundException("Ticket not found in S3 with id: 999"));
+
+        mockMvc.perform(get("/api/tickets/S3/{id}", 999L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("Ticket not found in S3 with id: 999"));
+    }
+
+    @Test
+    void shouldReturnNotFoundWhenDeletingNonExistentTicketFromS3() throws Exception {
+        Mockito.doThrow(new ResourceNotFoundException("Ticket not found in S3 with id: 999"))
+                .when(ticketService).deleteTicketFromS3(anyLong());
+
+        mockMvc.perform(delete("/api/tickets/S3/{id}", 999L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.error").value("Ticket not found in S3 with id: 999"));
+    }
 }
