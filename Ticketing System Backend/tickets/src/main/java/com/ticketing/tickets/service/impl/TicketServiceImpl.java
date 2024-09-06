@@ -21,9 +21,9 @@ public class TicketServiceImpl implements TicketService {
 
     private final TicketRepository ticketRepository;
     private final S3Client amazonS3;
-    private final String bucketName = "my-op-bucket";
-    private final String TICKET_PREFIX = "tickets/Ticket_";
-    private final String JSON_EXTENSION = ".json";
+    private static final String BUCKET_NAME = "my-op-bucket";
+    private static final String TICKET_PREFIX = "tickets/Ticket_";
+    private static final String JSON_EXTENSION = ".json";
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public TicketServiceImpl(TicketRepository ticketRepository, S3Client amazonS3) {
@@ -43,14 +43,13 @@ public class TicketServiceImpl implements TicketService {
     private void saveTicketToS3(Ticket ticket) {
         log.debug("Saving ticket to S3: {}", ticket);
         String key = TICKET_PREFIX + ticket.getId() + JSON_EXTENSION;
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
             // Serialize Ticket object to JSON string
             String jsonString = objectMapper.writeValueAsString(ticket);
 
             // Save JSON string to S3
             amazonS3.putObject(PutObjectRequest.builder()
-                            .bucket(bucketName)
+                            .bucket(BUCKET_NAME)
                             .key(key)
                             .build(),
                     RequestBody.fromString(jsonString));
@@ -106,7 +105,7 @@ public class TicketServiceImpl implements TicketService {
         String key = TICKET_PREFIX + id + JSON_EXTENSION;
         try {
             GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                    .bucket(bucketName)
+                    .bucket(BUCKET_NAME)
                     .key(key)
                     .build();
             String ticketJson = amazonS3.getObjectAsBytes(getObjectRequest).asUtf8String();
@@ -116,10 +115,10 @@ public class TicketServiceImpl implements TicketService {
             throw new ResourceNotFoundException("Ticket not found in S3 with id: " + id);
         } catch (S3Exception e) {
             log.error("Failed to get ticket from S3: {}", e.awsErrorDetails().errorMessage());
-            throw new RuntimeException("Failed to get ticket from S3", e);
+            throw new ResourceNotFoundException("Failed to get ticket from S3");
         } catch (Exception e) {
             log.error("An unexpected error occurred while getting ticket from S3: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to get ticket from S3", e);
+            throw new ResourceNotFoundException("Failed to get ticket from S3");
         }
     }
 
@@ -129,7 +128,7 @@ public class TicketServiceImpl implements TicketService {
         List<Ticket> tickets = new ArrayList<>();
         try {
             ListObjectsV2Request listObjects = ListObjectsV2Request.builder()
-                    .bucket(bucketName)
+                    .bucket(BUCKET_NAME)
                     .prefix("tickets/")
                     .build();
             ListObjectsV2Response listObjectsResponse = amazonS3.listObjectsV2(listObjects);
@@ -137,7 +136,7 @@ public class TicketServiceImpl implements TicketService {
             for (S3Object s3Object : listObjectsResponse.contents()) {
                 String key = s3Object.key();
                 String ticketJson = amazonS3.getObjectAsBytes(GetObjectRequest.builder()
-                                .bucket(bucketName)
+                                .bucket(BUCKET_NAME)
                                 .key(key)
                                 .build())
                         .asUtf8String();
@@ -147,10 +146,10 @@ public class TicketServiceImpl implements TicketService {
             log.info("Fetched {} tickets from S3", tickets.size());
         } catch (S3Exception e) {
             log.error("Failed to get tickets from S3: {}", e.awsErrorDetails().errorMessage());
-            throw new RuntimeException("Failed to list tickets from S3", e);
+            throw new ResourceNotFoundException("Failed to list tickets from S3");
         } catch (Exception e) {
             log.error("An unexpected error occurred while deserializing tickets from S3: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to deserialize tickets from S3", e);
+            throw new ResourceNotFoundException("Failed to deserialize tickets from S3");
         }
         return tickets;
     }
@@ -162,7 +161,7 @@ public class TicketServiceImpl implements TicketService {
         String key = TICKET_PREFIX + id + JSON_EXTENSION;
         try {
             amazonS3.deleteObject(DeleteObjectRequest.builder()
-                    .bucket(bucketName)
+                    .bucket(BUCKET_NAME)
                     .key(key)
                     .build());
             log.info("Ticket deleted from S3 with id: {}", id);
@@ -172,7 +171,6 @@ public class TicketServiceImpl implements TicketService {
             log.error("Failed to delete ticket from S3: {}", e.awsErrorDetails().errorMessage());
         }catch (Exception e) {
             log.error("An unexpected error occurred while deleting ticket from S3: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to delete ticket from S3", e);
         }
     }
 }
